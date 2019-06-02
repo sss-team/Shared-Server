@@ -374,52 +374,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 					}
 					?>
 				</form>				
-				
-<<<<<<< HEAD
-=======
-			</div>
-		</div>
-	</div>
-</div>
 
-			<!-- Modal HTML Créer un groupe-->
-<div id="myModal_groupe" class="modal fade">
-	
-
-	<div class="modal-dialog modal-login">
-		<div class="modal-content">
-			<div class="modal-header">
-							<div class="avatar"><i class="material-icons">&#xE7FD;</i></div>
-							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-			</div>
-			<div class="modal-body">
-				<form action="insertion.php" method="POST">
-					<span class="titre">Créer un groupe</span><br/><br/><br/>
-					<span class="fichier">Nom du groupe :</span>
-						<input type="text"  name="new_groupe_name" /><br /><br />
-					
-					<div class="form-group">
-					<span class="fichier">Membre du groupe </span><br/><br/>
-					<form action="test.php" method="POST">
-						<span class="fichier">User name :</span>
-						<input type="text"  name="name_membre" />
-						<input type="submit" name="ajout_groupe" value="Invité"/>
-					</form>
-					
-
-					</div>
-					<div class="form-group">
-						<input type="submit" class="btn btn-primary btn-block btn-lg" name="créer_groupe" value="Créer le groupe"/>
-					</div>
-					<?php
-					if(isset($erreur))
-					{
-						echo '<font color="red">'.$erreur."</font>";
-					}
-					?>
-				</form>				
-				
->>>>>>> master
 			</div>
 		</div>
 	</div>

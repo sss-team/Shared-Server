@@ -252,6 +252,24 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
                 <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="Images/créer_groupe.png"></a>
             
         </div>
+		<?php 
+			$id = $_SESSION['id'];
+			$ids_groupe = $bdd->query("SELECT id_groupe from Groupe_membre WHERE id='$id'");
+			$x = 0;
+			foreach($ids_groupe as $id_groupe):
+				$id_groupe_user = $id_groupe['id_groupe'];
+				$name_groupe = $bdd->query("SELECT name_groupe from groupe where id_groupe='$id_groupe_user'");
+				$existe = $name_groupe->rowCount();
+				if($existe==1)
+				{
+					$name_groupe = $name_groupe->fetch();
+					$name_groupe = $name_groupe['name_groupe'];
+					echo "$name_groupe <br>";
+				}
+
+				$x++;
+			endforeach;
+		?>
             <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam eos, quod pariatur voluptas maiores vero earum perspiciatis ex dignissimos? Aliquam deserunt omnis suscipit numquam blanditiis ipsum dicta dolorem eligendi maiores!</p>
         </div>
         <div class="col-md-10">

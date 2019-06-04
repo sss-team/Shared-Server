@@ -251,8 +251,8 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
         <div class="col-md-2">
 		<div class="media-left">
             
-                <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="Images/créer_groupe.png"></a>
-				<a href="#myModal_supprimer" data-toggle="modal"><img class="media-object" src="Images/supprimer.png"></a>
+                <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="Images/créer_groupe.png"></a><br>
+				<a href="#myModal_supprimer" data-toggle="modal"><img class="media-object" src="Images/supprimer.png"></a><br>
             
         </div>
 		<?php 
@@ -277,7 +277,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 				$x++;
 			endforeach;
 		?>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam eos, quod pariatur voluptas maiores vero earum perspiciatis ex dignissimos? Aliquam deserunt omnis suscipit numquam blanditiis ipsum dicta dolorem eligendi maiores!</p>
+            <p></p>
         </div>
         <div class="col-md-10">
             <div class="row">

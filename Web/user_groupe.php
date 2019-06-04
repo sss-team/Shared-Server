@@ -257,14 +257,16 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
         <div class="col-md-2">
 		<div class="media-left">
             
-                <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="Images/créer_groupe.png"></a>
-				<a href="#myModal_supprimer" data-toggle="modal"><img class="media-object" src="Images/supprimer.png"></a>
+                <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="Images/créer_groupe.png"></a><br>
+				<a href="#myModal_membre" data-toggle="modal"><img class="media-object" src="Images/ajouter_membre.png"></a><br>
+				<a href="#myModal_supprimer" data-toggle="modal"><img class="media-object" src="Images/supprimer.png"></a><br>
         </div>
-		<p> <?php echo "$name_groupe <br>";
+		<p> <?php echo "<p id='desc_fic'>$name_groupe </p><br>";
 		$groupe_personnel = "test.php?id=".$_SESSION['id'];
-		echo "<a href=\"$groupe_personnel\">Groupe personnel<a><br>";
+		echo "<a href=\"$groupe_personnel\">Groupe personnel et liste des groupes<a><br>";
 		?></p><br>
 		<?php 
+		/*
 			$id = $_SESSION['id'];
 			$ids_groupe = $bdd->query("SELECT id_groupe from Groupe_membre WHERE id='$id'");
 			$x = 0;
@@ -285,6 +287,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 
 				$x++;
 			endforeach;
+			*/
 		?>
             
         </div>
@@ -488,6 +491,42 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 					</div>
 					<div class="form-group" id="t">
 						<input type="submit" class="btn btn-primary btn-block btn-lg" name="supprimer_file_groupe" value="Supprimer le fichier"/>
+					</div>
+					<?php
+					if(isset($erreur))
+					{
+						echo '<font color="red">'.$erreur."</font>";
+					}
+					?>
+				</form>				
+
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- Modal HTML Ajouter des membres-->
+	<div id="myModal_membre" class="modal fade">
+	
+
+	<div class="modal-dialog modal-login">
+		<div class="modal-content">
+			<div class="modal-header">
+							<div class="avatar"><i class="material-icons">&#xE7FD;</i></div>
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+			<?php $b = "ajouter_membre.php?id=".$_SESSION['id']."&liens=".$name_groupe;?>
+				<form action="ajouter_membre.php" method="POST">
+					<span class="titre">Ajouter des membres</span><br/><br/><br/>
+					<span class="fichier">Nom :</span>
+						<input type="text"  name="name_ajouter" /><br /><br />
+					
+					<div class="form-group">
+					
+					</div>
+					<div class="form-group" id="t">
+						<input type="submit" class="btn btn-primary btn-block btn-lg" name="ajouter_membre" value="Ajouter"/>
 					</div>
 					<?php
 					if(isset($erreur))

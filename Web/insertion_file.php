@@ -225,7 +225,7 @@ $user_name = $userinfo['user_name'];
                     $message  = "Fichier non transfere "; 
                     $message .= "(erreur inconnue : ".$code_erreur.")"; 
             }
-            $a = "user_groupe.php?id=".$_SESSION['id']."&liens=".$name;
+            
             header("Location: user_groupe.php?id=".$_SESSION['id']."&liens=".$groupe_name);
 
         }

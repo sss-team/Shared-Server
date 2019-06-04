@@ -56,9 +56,9 @@ $user_name = $userinfo['user_name'];
                         $insert_file -> closeCursor();
 
 
-                        //$connectio_ssh2 = ssh2_connect('localhost', 22);
-                        //ssh2_auth_password($connectio_ssh2, 'mm', 'azert');
-                        //ssh2_exec($connectio_ssh2, 'upload_file '.$file_name.' '.$user_name.' '.$groupe_name);
+                        $connectio_ssh2 = ssh2_connect('localhost', 22);
+                        ssh2_auth_password($connectio_ssh2, 'mm', 'azert');
+                        ssh2_exec($connectio_ssh2, "sudo chmod 777 /var/www/html/Web/Dossier/$user_name/$file_name");
 
                         
 
@@ -165,9 +165,9 @@ $user_name = $userinfo['user_name'];
                         $insert_file -> closeCursor();
 
 
-                        //$connectio_ssh2 = ssh2_connect('localhost', 22);
-                        //ssh2_auth_password($connectio_ssh2, 'mm', 'azert');
-                        //ssh2_exec($connectio_ssh2, 'upload_file '.$file_name.' '.$user_name.' '.$groupe_name);
+                        $connectio_ssh2 = ssh2_connect('localhost', 22);
+                        ssh2_auth_password($connectio_ssh2, 'mm', 'azert');
+                        ssh2_exec($connectio_ssh2, "chmod 777 /var/www/html/Web/Dossier/$groupe_name/$file_name");
 
                         
 

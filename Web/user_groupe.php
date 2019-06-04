@@ -186,6 +186,12 @@ if (isset($_SESSION['id']) AND ($_SESSION['id']) > 0)
 		left: 40%;
 
 	}
+	.titre1{
+		color: black;
+		position: absolute;
+		left: 27%;
+
+	}
     #desc_fic {
         color: white;
     }
@@ -252,30 +258,35 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 		<div class="media-left">
             
                 <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="Images/créer_groupe.png"></a>
-            
+				<a href="#myModal_supprimer" data-toggle="modal"><img class="media-object" src="Images/supprimer.png"></a>
         </div>
+		<p> <?php echo "$name_groupe <br>";
+		$groupe_personnel = "test.php?id=".$_SESSION['id'];
+		echo "<a href=\"$groupe_personnel\">Groupe personnel<a><br>";
+		?></p><br>
 		<?php 
-		/*
 			$id = $_SESSION['id'];
 			$ids_groupe = $bdd->query("SELECT id_groupe from Groupe_membre WHERE id='$id'");
 			$x = 0;
 			foreach($ids_groupe as $id_groupe):
 				$id_groupe_user = $id_groupe['id_groupe'];
-				$name_groupe = $bdd->query("SELECT name_groupe from groupe where id_groupe='$id_groupe_user'");
-				$existe = $name_groupe->rowCount();
+				$name_groupe_ex = $bdd->query("SELECT name_groupe from groupe where id_groupe='$id_groupe_user'");
+				$existe = $name_groupe_ex->rowCount();
 				if($existe==1)
 				{
-					$name_groupe = $name_groupe->fetch();
-					$name_groupe = $name_groupe['name_groupe'];
-					$_SESSION['name_groupe'] = $name_groupe;
-					#$a = header("Location: user_groupe.php?id=".$_SESSION['id']);
+					while ($name_g = $name_groupe_ex->fetch())
+					{
+					$name = $name_g['name_groupe'];
+					$_SESSION['name_groupe'] = $name;
+					$a = "user_groupe.php?id=".$_SESSION['id']."&liens=".$name;
+					echo "<a href =\"$a\">$name</a> <br>";
+					}
 				}
 
 				$x++;
 			endforeach;
-		*/
 		?>
-            <p> <?php echo $name_groupe;?>;</p>
+            
         </div>
         <div class="col-md-10">
             <div class="row">
@@ -453,6 +464,44 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 <?php
     }
 ?>
+
+	     	<!-- Modal HTML Supprimer un fichier-->
+			 <div id="myModal_supprimer" class="modal fade">
+	
+	<div class="modal-dialog modal-login">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="avatar"><i class="material-icons">&#xE7FD;</i></div>
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form action="supprimer_file.php" method="POST">
+					<span class="titre1">Supprimer un fichier dans le groupe <?php echo $name ;?></span><br/><br/><br/>
+					<span class="fichier">Nom du fichier :</span>
+						<input type="text"  name="fichier_a_suppr" required/><br /><br />
+					
+					<div class="form-group">
+					<span class="fichier">Nom du propriétaire :</span>
+					<input type="text"  name="name_prop" required/><br /><br />
+					<span class="fichier">Groupe du fichier :</span>
+					<input type="text"  name="groupe_file" required/><br /><br />
+					</div>
+					<div class="form-group" id="t">
+						<input type="submit" class="btn btn-primary btn-block btn-lg" name="supprimer_file_groupe" value="Supprimer le fichier"/>
+					</div>
+					<?php
+					if(isset($erreur))
+					{
+						echo '<font color="red">'.$erreur."</font>";
+					}
+					?>
+				</form>				
+
+			</div>
+		</div>
+	</div>
+</div>
+
 </body>
 </html>   
 <?php

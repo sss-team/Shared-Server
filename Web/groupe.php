@@ -19,6 +19,9 @@ if(isset($_POST['créer_groupe']))
     $insert_groupe = $bdd->prepare("INSERT INTO groupe(name_groupe, droit_ajouter, droit_suppr) VALUES(?,?,?)");
     $insert_groupe->execute(array($name_new_groupe, $ajouter, $suppr));
     
+    $connectio_ssh2 = ssh2_connect('localhost', 22);
+	ssh2_auth_password($connectio_ssh2, 'mm', 'azert');
+	ssh2_exec($connectio_ssh2, "mkdir /var/www/html/Web/Dossier/$name_new_groupe && chmod 777 /var/www/html/Web/Dossier/$name_new_groupe");
 
     $id_groupe = $bdd->query("SELECT id_groupe from groupe WHERE name_groupe='$name_new_groupe'");
     $exixta = $id_groupe->rowCount();
@@ -26,8 +29,6 @@ if(isset($_POST['créer_groupe']))
         $id_groupe = $id_groupe->fetch();
         $id_groupe = $id_groupe['id_groupe'];
     }
-    echo $id_groupe;
-    echo $id_proprietaire;
 
     $insert_les_id_relation = $bdd->prepare("INSERT INTO Groupe_membre(id_groupe, id) VALUES(?, ?)");
     $insert_les_id_relation->execute(array($id_groupe, $id_proprietaire));

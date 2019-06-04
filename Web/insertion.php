@@ -8,20 +8,10 @@
 <?php
 session_start();
 include("funct.php");
-if (isset($_SESSION["id"])) 
+
+function Insertion($nom_groupe)
 {
-	$getid = intval($_SESSION['id']);
-	$req = $bdd ->prepare("SELECT * FROM membre WHERE id = ? ");
-	$req ->execute(array($getid));
-	$userinfo = $req -> fetch();
-
-
-$message = ""; 
-$user_name = $userinfo['user_name'];
-$groupe_name = 'dfdfd fd df df dfd fd fddf'; 
-
-if (isset($_POST["valid"]))
-{ 
+	$groupe_name = $groupe_name;
 	// Récupére les informations sur le fichier. 
 	$oFileInfos = $_FILES["fichier"]; 
  
@@ -121,9 +111,8 @@ if (isset($_POST["valid"]))
 			$message .= "(erreur inconnue : ".$code_erreur.")"; 
 	}
 
-}
-	if($message == 'OK'){
-		
+	if($message == 'OK')
+	{
 		?>
 		<script src='javascript/jquery-3.4.1.min.js'></script>
 		<script>
@@ -131,7 +120,6 @@ if (isset($_POST["valid"]))
 			alert("Fichier bien envoyer!");			
 		});
 		</script>
-
 		<?php
 		header("Location: test.php?id=".$_SESSION['id']);
 	}
@@ -140,6 +128,31 @@ if (isset($_POST["valid"]))
 		echo $message;
 	}
 }
+
+if (isset($_SESSION["id"])) 
+{
+	$getid = intval($_SESSION['id']);
+	$req = $bdd ->prepare("SELECT * FROM membre WHERE id = ? ");
+	$req ->execute(array($getid));
+	$userinfo = $req -> fetch();
+
+
+$message = ""; 
+$user_name = $userinfo['user_name'];
+
+	if (isset($_POST["valid"]))
+	{ 
+		$groupe_name = $_SESSION['groupe_perso']; 
+		Insertion($groupe_name);
+	}
+	elseif (isset($_POST['valid_fichier_groupe']))
+	{
+		$groupe_name = $_SESSION['name_groupe'];
+		Insertion($groupe_name);
+	}
+
+}
 ?>
+
 </body>	
 </html>

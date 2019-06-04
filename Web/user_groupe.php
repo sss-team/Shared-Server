@@ -198,8 +198,8 @@ if (isset($_SESSION['id']) AND ($_SESSION['id']) > 0)
 
 <?php
 $user_name_connecter=$userinfo['user_name'];
-$groupe_perso = $userinfo['user_name'];
-$_SESSION['groupe_perso'] = $groupe_perso;
+$name_groupe = $_GET['liens'];
+$_SESSION['name_groupe'] = $name_groupe;
 if ($userinfo['id'] == $_SESSION['id']) 
 { 
 ?>
@@ -243,7 +243,7 @@ $extension_image = array('bmp', 'gif', 'iso', 'jpeg', 'jpg', 'png', 'eps', 'psd'
 $extension_audio = array('aac', 'mp3', 'wav', 'mid', 'AAC', 'aac');
 $extension_video = array('avi', 'mkv', 'mov', 'mpg', 'qt', 'ra', 'ram', 'mp4', 'wmv', );
 
-$fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, description_file from file where groupe_name LIKE '$groupe_perso'");
+$fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, description_file from file where groupe_name LIKE '$name_groupe'");
 ?>
 
 <div class="container-fluid">
@@ -255,6 +255,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
             
         </div>
 		<?php 
+		/*
 			$id = $_SESSION['id'];
 			$ids_groupe = $bdd->query("SELECT id_groupe from Groupe_membre WHERE id='$id'");
 			$x = 0;
@@ -264,19 +265,17 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 				$existe = $name_groupe->rowCount();
 				if($existe==1)
 				{
-					while ($name_g = $name_groupe->fetch())
-					{
-					$name = $name_g['name_groupe'];
-					$_SESSION['name_groupe'] = $name;
-					$a = "user_groupe.php?id=".$_SESSION['id']."&liens=".$name;
-					echo "<a href =\"$a\">$name</a> <br>";
-					}
+					$name_groupe = $name_groupe->fetch();
+					$name_groupe = $name_groupe['name_groupe'];
+					$_SESSION['name_groupe'] = $name_groupe;
+					#$a = header("Location: user_groupe.php?id=".$_SESSION['id']);
 				}
 
 				$x++;
 			endforeach;
+		*/
 		?>
-            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Magnam eos, quod pariatur voluptas maiores vero earum perspiciatis ex dignissimos? Aliquam deserunt omnis suscipit numquam blanditiis ipsum dicta dolorem eligendi maiores!</p>
+            <p> <?php echo $name_groupe;?>;</p>
         </div>
         <div class="col-md-10">
             <div class="row">
@@ -305,7 +304,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
                         $groupe_file = $fichier['groupe_name'];
                         $date_upload_file = $fichier['date_upload'];
                         $description_file = $fichier['description_file'];
-                        $destination = "../../Web/Dossier/$user_name_connecter/$name_file";
+                        $destination = "../../Web/Dossier/$name_groupe/$name_file";
                         $extension_a_down = strtolower(substr(strrchr($name_file, '.'), 1));
 							if(strlen($name_file)>32)
 							{
@@ -379,6 +378,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 			</div>
 			<div class="modal-body">
+			<?php $b = "insertion_file.php?id=".$_SESSION['id']."&liens=".$name_groupe;?>
 				<form action="insertion_file.php" method="POST" enctype="multipart/form-data">
 					<span class="titre">Ajouter un fichier</span><br/><br/><br/>
 					<span class="fichier">Fichier :</span>
@@ -389,7 +389,7 @@ $fichiers = $bdd->query("SELECT user_name, file_name, groupe_name, date_upload, 
 						<textarea name="description_file" rows="7" cols="45" class="form-control" placeholder="Description du fichier" name="description_file" ></textarea>
 					</div>
 					<div class="form-group" id="t">
-						<input type="submit" class="btn btn-primary btn-block btn-lg" name="valid" value="Envoyer le fichier"/>
+						<input type="submit" class="btn btn-primary btn-block btn-lg" name="valid_fichier_groupe" value="Envoyer le fichier"/>
 					</div>
 					<?php
 					if(isset($erreur))

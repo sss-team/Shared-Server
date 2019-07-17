@@ -11,10 +11,10 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
     if($action == 'connecter' and $id_get == $id and $user_name == $user_name_get){
         $title = "Shared-Server";
         ob_start();
-        require("public/link_bt_acceuil.html");
+        require("public/link_bt/link_bt_acceuil.html");
         $entete = ob_get_clean();
         ob_start();
-        require("public/style_acceuil.html");
+        require("public/style/style_acceuil.html");
         $style = ob_get_clean();
         ob_start();
         ?>

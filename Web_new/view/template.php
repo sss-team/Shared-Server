@@ -5,8 +5,15 @@
     <?= $entete ?>
     <title><?= $title ?></title>
 </head>
+
 <?= $style ?>
+
+<script>
+    <?= $script ?>
+</script>
+
 <body>
     <?= $content ?>
 </body>
+
 </html>

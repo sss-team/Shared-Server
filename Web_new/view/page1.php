@@ -1,20 +1,20 @@
 <?php
     $title = "Shared-Server";
 	ob_start();
-	require("../public/link_bt_page1.html");
+	require("public/link_bt/link_bt_page1.html");
     $entete = ob_get_clean();
 	ob_start();
-	require("../public/style_page1.html");
+	require("public/style/style_page1.html");
 	$style = ob_get_clean();
 	ob_start();
 ?>
 
 <div class="topnav" class="col-sm-6 col-md-4 col-lg-2" >
-  			<a class="active" href="index.html">Accueil</a>
-  			<a href="fonction.html">Fonctionnalités</a>
-  			<a href="gallery.html">Gallerie</a>
-  			<a href="membre.html">Membres</a>
-  			<a href="contact.html"> Nous contacter </a>
+  			<a class="active" href="index.php">Accueil</a>
+  			<a href="view/fonctionnalite.php">Fonctionnalités</a>
+  			<a href="view/gallerie.php">Gallerie</a>
+  			<a href="view/membre.php">Membres</a>
+  			<a href="view/contact.php"> Nous contacter </a>
 		</div>
 		
 		
@@ -28,7 +28,7 @@
             
             	<div class="boutons" class="col-sm-6 col-md-4 col-lg-2"> 
             		<button type="button" class="btn btn-outline-info" href="#myModal"  data-toggle="modal" >Se connecter</button> 
-            		<button onclick='window.location="../index.php?action=inscrire"' type="button" class="btn btn-outline-danger">S'inscrire gratuitement maintenant</button>
+            		<button onclick='window.location="index.php?action=inscrire"' type="button" class="btn btn-outline-danger">S'inscrire gratuitement maintenant</button>
             	</div>
 
             	
@@ -43,7 +43,7 @@
                				 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
 				<div class="modal-body">
-					<form action="../index.php?action=se_connecter" method="post">
+					<form action="index.php?action=se_connecter" method="post">
 						<div class="form-group">
 							<input type="text" class="form-control" placeholder="Nom d'utilisateur ou adresse email" name="name_or_email" required>
 						</div>
@@ -62,8 +62,7 @@
 	</div>  
 
     <?php
-    if(isset($_GET['verify'])){
-        $verify = htmlspecialchars($_GET['verify']);
+    if(isset($verify)){       
         if($verify == 'error')
         {                           
             echo '<font color="red">Nom d\'utilisateur incorrecte</font>';

@@ -1,25 +1,11 @@
 <?php
-    $title = "Shared_Server";
+    $title = "Créer un compte";
     ob_start();
-?>
-
-    <link rel="icon" type="image/png" href="Images/favicon-96x96.png" />
-    <link href="../public/style_inscription.css" rel="stylesheet"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700" rel="stylesheet">
-    <title>Créer un compte</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-            <link href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" rel="stylesheet">
-            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
-
-<?php
+    require('public/link_bt/link_bt_inscription.html');
     $entete = ob_get_clean();
+    ob_start();
+    require('public/style/style_inscription.html');
+    $style = ob_get_clean();
     ob_start();
 ?>
 
@@ -56,7 +42,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="checkbox-inline"><input type="checkbox" required="required"> J'accepte<a href="#">les conditions d'utilisation</a> &amp; <a href="#">Privacy Policy</a></label>
+                <label class="checkbox-inline"><input type="checkbox" required="required"> J'accepte <a href="#"> les conditions d'utilisation</a> &amp; <a href="#">Privacy Policy</a></label>
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-primary btn-lg" name="s_inscrire">S'inscrire</button>
@@ -69,7 +55,7 @@
             }
             ?>
         </form>
-        <div class="text-center">Avez-vous déjà un compte? <a  href="http://localhost/projet/Shared-Server-1/Web/shared-server.php" data-toggle="modal" >Se connecter ici</a></div>
+        <div class="text-center">Avez-vous déjà un compte? <a  href="index.php?action=se_connecter" data-toggle="modal" >Se connecter ici</a></div>
     </div>
 
 <?php

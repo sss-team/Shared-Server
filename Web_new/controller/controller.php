@@ -2,7 +2,7 @@
 require_once("model/Model.php");
 
 function page1(){
-    header("Location:view/page1.php");
+    require("view/page1.php");
 }
 
 function inscrire(){
@@ -15,7 +15,8 @@ function login($name_or_email, $passwd){
     $info_user = $verify_login->fetch();
     
     if($verify_login === false or $info_user['id'] ==''){
-        header("Location:view/page1.php?verify=error");
+        $verify = "error";
+        require("view/page1.php");
     }
     else{
         $verification_passwd = password_verify($passwd, $info_user['mdp']);
@@ -32,7 +33,8 @@ function login($name_or_email, $passwd){
             header("Location:index.php?action=connecter&user_name=$user_name&id=$id");
         }
         else{
-            header("Location:view/page1.php?verify=error_mdp");
+            $verify = "error_mdp";
+            require("view/page1.php");
         }
 
     }

@@ -41,6 +41,18 @@ try{
             new_groupe($user_name, $name_new_groupe, $id);
         }
 
+        elseif($action == 'ajouter_membre'){
+            ajouter_membre();
+        }
+
+        elseif($action == 'insertion_membre' and isset($_GET['name_groupe'])){
+            $name_insert_groupe = htmlspecialchars($_POST['user_name']);
+            $droit_ajout = htmlspecialchars($_POST['ajouter_autre_membre']);
+            $droit_suppr_file = htmlspecialchars($_POST['supprimer_file']);
+            $name_groupe = htmlspecialchars($_GET['name_groupe']);
+            insert_new_member($name_insert_groupe, $droit_ajout, $droit_suppr_file, $name_groupe);
+        }
+
         elseif($action == 'my_groupe' and isset($_GET['groupe_name']) and 
             isset($_GET['user_name']) and isset($_GET['id'])){
                 $groupe_name = htmlspecialchars($_GET['groupe_name']);

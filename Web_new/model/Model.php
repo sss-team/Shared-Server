@@ -87,4 +87,26 @@ class Query_bdd extends Connect_bdd{
         $files_my_groupe->execute(array($groupe_name));
         return $files_my_groupe;
     }
+
+    public function insertion_member_groupe($name_groupe, $id_groupe, $id, $droit_ajout, $droit_suppr_file){
+        $bdd = $this->dbconnect();
+        $verify_insert_member = $bdd->prepare("INSERT INTO Groupe_membre(groupe_name, id_groupe, id, droit_ajouter, droit_suppr)
+                                                VALUES(?,?,?,?,?) ");
+        $verify_insert_member->execute(array($name_groupe, $id_groupe, $id, $droit_ajout, $droit_suppr_file));
+        return $verify_insert_member;
+    }
+
+    public function select_id_user($user_name){
+        $bdd = $this->dbconnect();
+        $id = $bdd->prepare("SELECT id from membre WHERE user_name = ?");
+        $id->execute(array($user_name));
+        return $id;
+    }
+
+    public function select_id_groupe($name_groupe){
+        $bdd = $this->dbconnect();
+        $id_groupe = $bdd->prepare("SELECT id_groupe from groupe WHERE name_groupe = ?");
+        $id_groupe->execute(array($name_groupe));
+        return $id_groupe;
+    }
 }

@@ -76,10 +76,11 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 				}
 
 				if(isset($affichage_files_groupe)){
-					echo "$affichage_files_groupe <br><br>";
+					echo "$affichage_files_groupe <br>";
 					$_SESSION['groupe_actif'] = $affichage_files_groupe;
 
 				?>
+				<a href="index.php?action=ajouter_membre"><img class="media-object" src="public/image/ajouter_membre.png"></a><br><br>
 				<a href="index.php?action=connecter&amp;user_name=<?= $user_name;?>&amp;id=<?= $id;?>"><?= $user_name; ?> </a><br>
 
 				<?php
@@ -100,7 +101,7 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 					$groupe_name = $groupe['groupe_name'];
 					$id_groupe = $groupe['id_groupe'];
 			?>
-					<a href="index.php?action=groupe&amp;groupe_name=<?= $groupe_name; ?>&amp;
+					<a href="index.php?action=my_groupe&amp;groupe_name=<?= $groupe_name; ?>&amp;
 					user_name=<?= $user_name; ?>&amp;id=<?= $id;?>&amp;id_groupe=<?= $id_groupe; ?>"> <?= $groupe_name; ?> </a><br>
 			<?php
 				}

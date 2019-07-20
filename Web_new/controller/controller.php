@@ -9,6 +9,10 @@ function inscrire(){
     require("view/inscription.php");
 }
 
+function ajouter_membre(){
+    require("view/ajouter_membre.php");
+}
+
 function login($name_or_email, $passwd){
     $query_bdd = new Query_bdd;
     $verify_login = $query_bdd->connect($name_or_email);
@@ -56,6 +60,41 @@ function list_file($user_name, $id){
             $user_files = $user_name;
             require("view/acceuil.php");
         }
+    }
+}
+
+function insert_new_member($name_insert_groupe, $droit_ajout, $droit_suppr_file, $name_groupe){
+    if($droit_ajout == 'on'){
+        $droit_ajout = 1;
+    }
+    else{
+        $droit_ajout = 0;
+    }
+
+    if($droit_suppr_file == 'on'){
+        $droit_suppr_file = 1;
+    }
+    else{
+        $droit_suppr_file = 0;
+    }
+
+    $query_bdd = new Query_bdd;
+    $id_users = $query_bdd->select_id_user($name_insert_groupe);
+    $id_user = $id_users->fetch();
+    $id = $id_user['id'];
+
+    $id_groupes = $query_bdd->select_id_groupe($name_groupe);
+    $id_groupe_user = $id_groupes->fetch();
+    $id_groupe = $id_groupe_user['id_groupe'];
+    
+    $verify_insert_member = $query_bdd->insertion_member_groupe($name_groupe, $id_groupe, $id, $droit_ajout, $droit_suppr_file);
+    if($verify_insert_member === false or !isset($name_groupe) or !isset($id_groupe) or !isset($id) or !isset($droit_ajout) or !isset($droit_suppr_file)){
+        $erreur = "erreur d'ajout";
+        require("view/ajouter_membre.php");
+    }
+    else{
+        $erreur = "$name_insert_groupe est bien ajouté au groupe $name_groupe";
+        require("view/ajouter_membre.php");
     }
 }
 

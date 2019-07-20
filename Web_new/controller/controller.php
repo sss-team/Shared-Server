@@ -40,10 +40,76 @@ function login($name_or_email, $passwd){
     }
 }
 
-function list_file($user_name){
+function list_file($user_name, $id){
     $query_bdd = new Query_bdd;
     $files = $query_bdd->post_files($user_name);
-    require("view/acceuil.php");
+    $groupes_user = $query_bdd->select_groupe_user($id);
+    $mes_groupes = $query_bdd->select_mes_groupe($user_name);
+    if($files === false){
+        throw new Exception("Probléme sur files ");
+    }
+    else{
+        if($groupes_user === false or $mes_groupes === false){
+            throw new Exception("Probléme sur groupes_user ou mes_groupes");
+        }
+        else{
+            $user_files = $user_name;
+            require("view/acceuil.php");
+        }
+    }
+}
+
+
+function new_groupe($user_name, $name_new_groupe, $id){
+    $query_bdd = new Query_bdd;
+    $all_groupes = $query_bdd->select_all_groupe();
+    while($all_groupe = $all_groupes->fetch()){
+        $name_groupe = $all_groupe['name_groupe'];
+        if($name_groupe == $name_new_groupe){
+            $name_groupe_acceptable = 'false';
+            break;
+        }
+    }
+
+    if($name_groupe_acceptable != 'false'){
+        $create_groupe = $query_bdd->create_new_groupe($user_name, $name_new_groupe, $id);
+        if($create_groupe === false){
+            throw new Exception("Problème création groupe");
+        }
+        else{
+            header("Location:index.php?action=connecter&user_name=$user_name&id=$id");
+        }
+    }
+    else{
+        $error_name_groupe = "Nom du groupe déjà utilisé";
+        throw new Exception("Nom du groupe déjà utilisé");
+    }
+}
+
+function list_file_my_groupe($groupe_name, $user_name, $id, $id_my_groupe){
+    $query_bdd = new Query_bdd;
+    
+    $files_my_groupe = $query_bdd->select_files_my_groupe($groupe_name);
+    
+    $files = $files_my_groupe;
+    $groupes_user = $query_bdd->select_groupe_user($id);
+    $mes_groupes = $query_bdd->select_mes_groupe($user_name);
+    
+    if($files === false){
+        throw new Exception("Probléme sur files ");
+    }
+    else{
+        if($groupes_user === false or $mes_groupes === false){
+            throw new Exception("Probléme sur groupes_user ou mes_groupes");
+        }
+        else{
+            
+            $affichage_files_groupe = $groupe_name;
+          
+            require("view/acceuil.php");
+        }
+    }
+
 }
 
 function inscription($user_name, $email, $passwd, $confirmation_passwd){
@@ -86,4 +152,59 @@ function inscription($user_name, $email, $passwd, $confirmation_passwd){
         $erreur = "Username déjà utilisé";
         require("view/inscription.php");
     }
+}
+
+function se_deconnecter(){
+    session_start();
+    $_SESSION = array();
+    session_destroy();
+    header("Location:index.php");
+}
+
+
+function insertion_fichier($id, $fichier_temporaire, $code_erreur, $user_name, $file_name, 
+                            $groupe_name, $description_file, $destination){
+    $query_bdd = new Query_bdd;
+    
+    switch($code_erreur)
+    {
+        case UPLOAD_ERR_OK:
+            if(copy($fichier_temporaire, $destination)){
+                $verify_insertion = $query_bdd->insert_new_file($user_name, $file_name, $groupe_name, $description_file);
+            }
+            else{
+                throw new Exception("Erreur copie fichier");
+            }                           
+            break;
+        case UPLOAD_ERR_NO_FILE:
+            throw new Exception("Aucun fichier séléctionner");
+            break;
+        case UPLOAD_ERR_INI_SIZE:
+            throw new Exception("Taille fichier > upload_max_filesize");
+            break;
+        case UPLOAD_ERR_PARTIAL:
+            throw new Exception("Fichier partiellement transféré");
+            break;
+        case UPLOAD_ERR_NO_TMP_DIR:
+            throw new Exception("Aucun répertoire temporaire");
+            break;
+        case UPLOAD_ERR_CANT_WRITE:
+            throw new Exception("Erreur lors de l’écriture du fichier sur disque");
+            break;
+        default:
+            throw new Exception("Fichier non transféré");
+            break;
+    }
+    if($verify_insertion === false){
+        throw new Exception("Erreur insertion fichier");
+    }
+    else{
+        if($user_name == $groupe_name){
+            header("Location:index.php?action=connecter&user_name=$user_name&id=$id");
+        }
+        else{
+            header("Location:index.php?action=my_groupe&groupe_name=$groupe_name&user_name=$user_name&id=$id");
+        }
+    }   
+    
 }

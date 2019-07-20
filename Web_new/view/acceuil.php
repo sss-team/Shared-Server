@@ -8,7 +8,7 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
     $id_get = htmlspecialchars($_GET['id']);
     $user_name_get = htmlspecialchars($_GET['user_name']);
 
-    if($action == 'connecter' and $id_get == $id and $user_name == $user_name_get){
+    if(($action == 'connecter' or $action == 'my_groupe') and $id_get == $id and $user_name == $user_name_get){
         $title = "Shared-Server";
         ob_start();
         require("public/link_bt/link_bt_acceuil.html");
@@ -40,31 +40,136 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 			<li class="nav-item"><a href="#" class="nav-link notifications"><i class="fa fa-bell-o"></i><span class="badge">10</span></a></li>
 			<li class="nav-item"><a href="#" class="nav-link messages"><i class="fa fa-envelope-o"></i><span class="badge">-5</span></a></li>
 			<li class="nav-item dropdown">
-				<a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="Images/off.jpg" class="avatar" alt="Avatar"> <b class="off"> <?php echo $userinfo['user_name']; ?> </b><b class="caret"></b></a>
+				<a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle user-action"><img src="public/image/off.jpg" class="avatar" alt="Avatar"> <b class="off"> <?= $user_name; ?> </b><b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li><a href="#" class="dropdown-item"><i class="fa fa-user-o"></i> Profile</a></li>
 					<li><a href="#" class="dropdown-item"><i class="fa fa-sliders"></i> Langues</a></li>
 					<li class="divider dropdown-divider"></li>
-					<li><a href="se_deconnecter.php" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Déconnexion</a></li>
+					<li><a href="index.php?action=se_deconnecter" class="dropdown-item"><i class="material-icons">&#xE8AC;</i> Déconnexion</a></li>
 				</ul>
 			</li>
 		</ul>
 	</div>
 </nav>
 
-        <?php
-        while($file = $files->fetch()){
-            $name_file = $file['file_name'];
-            $user_name = $file['user_name'];
-            $groupe_file = $file['groupe_name'];
-            $date_upload_file = $file['date_upload'];
-            $description_file = $file['description_file'];
 
-            echo "$name_file et $user_name et $groupe_file et $date_upload_file et $description_file <br><br>";
-        }
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+			<div class="media-left">
+            
+                <a href="#myModal_groupe" data-toggle="modal"><img class="media-object" src="public/image/créer_groupe.png"></a><br>
+				<?php
+					if($error_name_groupe == "Nom du groupe déjà utilisé"){
+						echo $error_name_groupe;
+					}
+				?>
+				<a href="#myModal_supprimer" data-toggle="modal"><img class="media-object" src="public/image/supprimer.png"></a><br>
+            
+			</div>
+			
+			<?php
+				if(isset($user_files)){
+					echo "$user_files <br><br>";
+					$_SESSION['groupe_actif'] = $user_files;
+					
+				}
 
+				if(isset($affichage_files_groupe)){
+					echo "$affichage_files_groupe <br><br>";
+					$_SESSION['groupe_actif'] = $affichage_files_groupe;
+
+				?>
+				<a href="index.php?action=connecter&amp;user_name=<?= $user_name;?>&amp;id=<?= $id;?>"><?= $user_name; ?> </a><br>
+
+				<?php
+				
+				}
+
+				while($my_groupe = $mes_groupes->fetch()){
+					$my_groupe_name = $my_groupe["name_groupe"];
+					$id_my_groupe = $my_groupe["id_groupe"];
+			?>
+					<a href="index.php?action=my_groupe&amp;groupe_name=<?= $my_groupe_name; ?>&amp;
+					user_name=<?= $user_name;?>&amp;id=<?= $id;?>&amp;id_my_groupe=<?= $id_my_groupe;?>"> <?= $my_groupe_name; ?> </a><br>
+			<?php
+				}
+			
+				echo "<br>Autre groupe :<br>";
+				while($groupe = $groupes_user->fetch()){
+					$groupe_name = $groupe['groupe_name'];
+					$id_groupe = $groupe['id_groupe'];
+			?>
+					<a href="index.php?action=groupe&amp;groupe_name=<?= $groupe_name; ?>&amp;
+					user_name=<?= $user_name; ?>&amp;id=<?= $id;?>&amp;id_groupe=<?= $id_groupe; ?>"> <?= $groupe_name; ?> </a><br>
+			<?php
+				}
+			?>
+		</div>
+
+
+		<div class="col-md-10">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="media">
+						<div class="media-left">
+							<a href="#">
+							<a href="#myModal_fichier" data-toggle="modal"><img class="media-object" src="public/image/ajouter_ajouter.png"></a>
+							</a>
+						</div>
+						<div class="media-body">
+							<h4 class="media-heading"></h4>
+						</div>
+					</div>
+				</div>
+				<?php 
+					$i = 0; foreach ($files as $file): 
+				?>
+				<div class="col-md-4">
+                    <div class="media">
+                        <div class="media-left">
+
+							<?php
+							
+								$name_file = $file['file_name'];
+								$user_name = $file['user_name'];
+								$groupe_file = $file['groupe_name'];
+								$date_upload_file = $file['date_upload'];
+								$description_file = $file['description_file'];
+
+								if(isset($affichage_files_groupe)){
+									$destination = "public/stockage/groupe/$groupe_file/$name_file";
+									
+								}
+								else{
+									$destination = "public/stockage/users/$user_name/$name_file";
+									
+								}
+
+								require('list_file.php');
+							
+							?>
+
+						</div>
+                        	<div class="media-body">
+                            	<h4 class="media-heading"><br/></h4>
+                            
+                        	</div>
+                    	</div>
+                	</div>
+					<?php $i++; endforeach;?>
+            	</div>
+        	</div>
+    	</div>
+	</div>
+</div>
+
+<?php
+		require("public/modal/add_file.php");
+		require("public/modal/create_groupe.php");
+		require("public/modal/delete_file.php");
         $content = ob_get_clean();
-        require("template.php");
-        
+        require("template.php");        
     }
 }
+?>

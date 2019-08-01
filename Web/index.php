@@ -24,6 +24,11 @@ try{
             inscrire();
         }
 
+        elseif($action == 'rechercher'){
+            $rechercher = htmlspecialchars($_GET['search']);
+            echo $rechercher;
+        }
+
         elseif($action == 'profil'){
             if(isset($_GET['user_name']) and isset($_GET['id'])){
                 $user_name = htmlspecialchars($_GET['user_name']);
@@ -127,6 +132,7 @@ try{
                 $groupe_name = htmlspecialchars($_GET['groupe_name']);
                 $user_name = htmlspecialchars($_GET['user_name']);
                 $id = htmlspecialchars($_GET['id']);
+
                 list_file_my_groupe($groupe_name, $user_name, $id);
                 //mise_a_jour_temps_connection($user_name);
         }
@@ -137,7 +143,9 @@ try{
                 $groupe_file = htmlspecialchars($_GET['groupe_file']);
                 $name_prop = htmlspecialchars($_GET['name_prop']);
                 $type = htmlspecialchars($_GET['type']);
+
                 delete_file($name_file, $groupe_file, $name_prop, $type);
+
         }
 
         elseif($action == "delete_file_my_groupe" and isset($_GET['name_prop']) and isset($_GET['type']) and 

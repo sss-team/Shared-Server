@@ -82,9 +82,10 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 										<li class="nav-item"> <a href="#"  class="op"><i class="icon text-main-color fa fa-circle"  onclick="openNav2()"><h5 style="display: inline"> Membres active</h5></i></a></li>
 										<li class="nav-item"> <a href="#"  class="op"><i class="icon text-main-color fa fa-sliders"  onclick="openNav()"><h5 style="display: inline"> Menu</h5></i></a></li>
 										<li class="nav-item">
-											<form class="form-inline md-form form-sm active-white-2 mt-2">
-												<input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Rechercher " aria-label="Search">
-												<a href="index.php"><i class="fa fa-search" aria-hidden="true"></i></a>
+											<form class="form-inline md-form form-sm active-white-2 mt-2" action="index.php?action=rechercher" method="POST">
+												<input class="form-control form-control-sm mr-3 w-75" type="text" name="search" placeholder="Rechercher " aria-label="Search">
+												<input type="submit" name="rechercher" value="Rechercher" />
+												
 											</form>
 										</li>
 										<li class="nav-item"><a href="#" class="nav-link notifications"><i class="icon text-main-color fa fa-bell"></i><span class="badge">5</span></a></li>
@@ -185,13 +186,13 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 								<li><a href=<?= "$destination" ?> ><i class="fa fa-download" aria-hidden="true"></i></a></li>
 								<?php
 								if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop ){
-									?>
-										<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&droit_suppr=<?= $droit_suppression ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									?>			
+										<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&droit_suppr=<?= $droit_suppression ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 									<?php
 								}
 								elseif($user_name==$createur_groupe){
 									?>
-										<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+										<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 									<?php
 								}
 
@@ -499,12 +500,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 								<?php
 								if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop){
 									?>
-										<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+										<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 									<?php
 								}
 								elseif($user_name==$createur_groupe){
 									?>
-										<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+										<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 									<?php
 								}
 								?>
@@ -544,12 +545,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 						<?php
 							if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop){
 								?>
-									<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							elseif($user_name==$createur_groupe){
 								?>
-									<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 						?>
@@ -584,12 +585,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 							<?php
 							if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop ){
 								?>
-									<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							elseif($user_name==$createur_groupe){
 								?>
-									<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							?>
@@ -634,12 +635,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 							<?php
 							if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop){
 								?>
-									<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							elseif($user_name==$createur_groupe){
 								?>
-									<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							?>
@@ -675,12 +676,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 							<?php
 							if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop){
 								?>
-									<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							elseif($user_name==$createur_groupe){
 								?>
-									<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							?>
@@ -726,12 +727,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 							<?php
 							if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop){
 								?>
-									<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							elseif($user_name==$createur_groupe){
 								?>
-									<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							?>
@@ -766,12 +767,12 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 							<?php
 							if($_SESSION['groupe_actif'] == $user_name or $user_name == $name_prop){
 								?>
-									<li><a href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							elseif($user_name==$createur_groupe){
 								?>
-									<li><a href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
+									<li><a onclick="return(confirm('Etes-vous sûr de vouloir supprimer <?= $name_file ?> ?'));" href="index.php?action=delete_file_my_groupe&name_file=<?= $name_file ?>&name_prop=<?= $name_prop ?>&groupe_file=<?= $groupe_file ?>&type=<?= $type ?>&user_name=<?= $user_name ?>"><i class="fa fa-close" aria-hidden="true"></i></a></li>
 								<?php
 							}
 							?>

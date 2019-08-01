@@ -57,6 +57,11 @@ function list_file($user_name, $id){
     $mes_groupes = $query_bdd->select_mes_groupe($user_name);
     $users_connecter = $query_bdd->select_user_connecter();
 
+    $pdp_user_tab = $query_bdd->select_pdp_user($user_name);
+    $pdp_user_li = $pdp_user_tab->fetch();
+    $pdp_user = $pdp_user_li['file_name'];
+    $chemin_pdp = "public/stockage/users/$user_name/$pdp_user";
+
     if($files === false){
         throw new Exception("Probléme sur files ");
     }
@@ -197,6 +202,11 @@ function list_file_my_groupe($groupe_name, $user_name, $id){
     $membre_groupe = $query_bdd->select_membre_groupe($groupe_name);
     $nbr_membre = count($membre_groupe);
 
+    $pdp_user_tab = $query_bdd->select_pdp_user($user_name);
+    $pdp_user_li = $pdp_user_tab->fetch();
+    $pdp_user = $pdp_user_li['file_name'];
+    $chemin_pdp = "public/stockage/users/$user_name/$pdp_user";
+
     $createur_groupe_tabs = $createur_groupe_tab->fetch();
     $createur_groupe = $createur_groupe_tabs['createur_groupe'];
     if($files === false){
@@ -232,7 +242,7 @@ function inscription($user_name, $email, $passwd, $confirmation_passwd){
     if($name_already_utile == "false"){
         if(preg_match("#^[a-z0-9._-]+@esti.mg$#",$email)){
             if($passwd == $confirmation_passwd){
-                $passwd_hash = password_hash($passwd, PASSWORD_ARGON2I);
+                $passwd_hash = password_hash($passwd, PASSWORD_DEFAULT);
                 $insertion_info = $query_bdd->insertion_new_user($user_name, $email, $passwd_hash);
                 if($insertion_info === false){
                     throw new Exception("Probléme d'insertion dans la bdd");
@@ -271,6 +281,101 @@ function se_deconnecter($user_name){
     }
 }
 
+function quitter_groupe($user_name, $id, $groupe_name){
+    $query_bdd = new Query_bdd;
+    $id_groupe_tab = $query_bdd->select_id_groupe($groupe_name);
+    $id_groupe_li = $id_groupe_tab->fetch();
+    $id_groupe = $id_groupe_li['id_groupe'];
+
+    $quitter_groupe = $query_bdd->quitter_groupe_user($id, $groupe_name, $id_groupe);
+    if($quitter_groupe === false){
+        throw new Exception("Erreur quitter le groupe");
+    }
+    else{
+        $quitter_groupe_user = "Vous avez quitté le groupe $groupe_name";
+        header("Location:index.php?action=connecter&user_name=$user_name&id=$id&quitter=$quitter_groupe_user");
+    }
+
+}
+
+function afficahge_profil($user_name, $id){
+    
+    $query_bdd = new Query_bdd;
+    $info_user = $query_bdd->select_info_user($user_name);
+    $inft_user = $info_user->fetch();
+    $email = $inft_user['mail'];
+    $nom_complet = $inft_user['nom_complet'];
+    $prenom = $inft_user['prenom'];
+    $phone = $inft_user['phone'];
+    $pdp_user_tab = $query_bdd->select_pdp_user($user_name);
+    $pdp_user_li = $pdp_user_tab->fetch();
+    $pdp_user = $pdp_user_li['file_name'];
+    $chemin_pdp = "public/stockage/users/$user_name/$pdp_user";
+    if($info_user === false){
+        throw new Exception("Erreur info_user");
+    }
+    else{
+        require("view/pro.php");
+    }
+}
+
+function modify_profil($user_name, $id){
+    $query_bdd = new Query_bdd;
+    $pdp_user_tab = $query_bdd->select_pdp_user($user_name);
+    $pdp_user_li = $pdp_user_tab->fetch();
+    $pdp_user = $pdp_user_li['file_name'];
+    $chemin_pdp = "public/stockage/users/$user_name/$pdp_user";
+    require("view/modif_pro.php");
+}
+
+function information_modify_profil($nom, $email, $prenom, $phone, $user_name, $id){
+    $query_bdd = new Query_bdd;
+    $insert = $query_bdd->insert_info_profil($nom, $email, $prenom, $phone, $user_name);
+    if($insert === false){
+        $error = "Erreur d'insertion";
+        require("view/modif_pro.php");
+    }
+    else{
+        header("Location: index.php?action=profil&user_name=$user_name&id= $id");
+    }
+}
+
+function information_modify_mdp($user_name, $id, $mdp_actuell, $new_mdp, $new_mdp2){
+    $query_bdd = new Query_bdd;
+    $ancien_mdp_tab = $query_bdd->select_ancien_mdp($user_name);
+    $ancien_mdp_li = $ancien_mdp_tab->fetch();
+    $ancien_mdp = $ancien_mdp_li['mdp'];
+
+    $pdp_user_tab = $query_bdd->select_pdp_user($user_name);
+    $pdp_user_li = $pdp_user_tab->fetch();
+    $pdp_user = $pdp_user_li['file_name'];
+    $chemin_pdp = "public/stockage/users/$user_name/$pdp_user";
+
+    $verification_passwd = password_verify($mdp_actuell, $ancien_mdp);
+    if($verification_passwd){
+        if($new_mdp == $new_mdp2){
+            $passwd_hash = password_hash($new_mdp, PASSWORD_DEFAULT);
+            $insert_new_mdp = $query_bdd->insertion_new_mdp($passwd_hash, $user_name);
+            if($insert_new_mdp === false){
+                $error = "Erreur d'insertion nouveau mot de passe";
+            }
+            else{
+                $notification = "Mot de passe bien modifier";
+                require("view/modif_pro.php");
+            }
+        }
+        else{
+            $error = "Confirmation de la mot de passe incorrecte";
+            require("view/modif_pro.php");
+        }
+    }
+    else{
+        $error = "Mot de passe actuel incorrecte";
+        require("view/modif_pro.php");
+    }
+
+}
+
 function verification_user_connecter(){
     $query_bdd = new Query_bdd;
     $temps_connection = $query_bdd->select_temps_deb_connection();
@@ -299,11 +404,16 @@ function insertion_fichier($id, $fichier_temporaire, $code_erreur, $user_name, $
                             $groupe_name, $description_file, $destination){
     $query_bdd = new Query_bdd;
     
+    if($groupe_name == "".$user_name."_pdp"){
+        $delete_ancien_pdp = $query_bdd->delete_pdp_ancien($groupe_name, $user_name);
+    }
+
     switch($code_erreur)
     {
         case UPLOAD_ERR_OK:
             if(copy($fichier_temporaire, $destination)){
                 $verify_insertion = $query_bdd->insert_new_file($user_name, $file_name, $groupe_name, $description_file, $destination);
+                $notification = "$file_name bien ajouté";
             }
             else{
                 throw new Exception("Erreur copie fichier");
@@ -332,7 +442,10 @@ function insertion_fichier($id, $fichier_temporaire, $code_erreur, $user_name, $
         throw new Exception("Erreur insertion fichier");
     }
     else{
-        if($user_name == $groupe_name){
+        if($groupe_name == "".$user_name."_pdp"){
+            header("location:index.php?action=modif_pro&user_name=$user_name&id=$id&notif=$notification");
+        }
+        elseif($user_name == $groupe_name){
             header("Location:index.php?action=connecter&user_name=$user_name&id=$id");
         }
         else{

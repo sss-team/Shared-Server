@@ -24,6 +24,62 @@ try{
             inscrire();
         }
 
+        elseif($action == 'profil'){
+            if(isset($_GET['user_name']) and isset($_GET['id'])){
+                $user_name = htmlspecialchars($_GET['user_name']);
+                $id = htmlspecialchars($_GET['id']);
+                afficahge_profil($user_name, $id);
+            }
+        }
+
+        elseif($action == 'modif_pro'){
+            if(isset($_GET['user_name']) and isset($_GET['id'])){
+                $user_name = htmlspecialchars($_GET['user_name']);
+                $id = htmlspecialchars($_GET['id']);
+                modify_profil($user_name, $id);
+            }
+        }
+
+        elseif($action == 'information_modify_profil'){
+            if(isset($_GET['user_name']) and isset($_GET['id'])){
+                $user_name = htmlspecialchars($_GET['user_name']);
+                $id = htmlspecialchars($_GET['id']);
+                $nom = htmlspecialchars($_POST['nom']);
+                $email = htmlspecialchars($_POST['email']);
+                $prenom = htmlspecialchars($_POST['prenom']);
+                $phone = htmlspecialchars($_POST['phone']);
+                information_modify_profil($nom, $email, $prenom, $phone, $user_name, $id);
+            }
+        }
+
+        elseif($action == 'information_modify_mdp'){
+            if(isset($_GET['user_name']) and isset($_GET['id'])){
+                $user_name = htmlspecialchars($_GET['user_name']);
+                $id = htmlspecialchars($_GET['id']);
+                $mdp_actuell = htmlspecialchars($_POST['mdp_actuel']);
+                $new_mdp = htmlspecialchars($_POST['new_mdp']);
+                $new_mdp2 = htmlspecialchars($_POST['new_mdp2']);
+                information_modify_mdp($user_name, $id, $mdp_actuell, $new_mdp, $new_mdp2);
+            }
+        }
+
+        elseif($action == "ajouter_pdp"){
+            if(isset($_GET['user_name']) and isset($_GET['id'])){
+                $user_name = htmlspecialchars($_GET['user_name']);
+                $id = htmlspecialchars($_GET['id']);
+                $oFileInfos = $_FILES["image"]; 
+                $image_name= $oFileInfos["name"]; 
+                $image_name = str_replace(' ', '_', $image_name);
+                $image_temporaire = $oFileInfos["tmp_name"]; 
+                $code_erreur = $oFileInfos["error"]; 
+                $destination = "public/stockage/users/$user_name/$image_name";
+                $groupe_name = "".$user_name."_pdp";
+                $description_file = "pdp";
+                
+                insertion_fichier($id, $image_temporaire, $code_erreur, $user_name, $image_name, $groupe_name, $description_file, $destination);
+            }
+        }
+
         elseif($action == 'inscription'){
             $user_name = htmlspecialchars($_POST['user_name']);
             $email = htmlspecialchars($_POST['email']);
@@ -45,6 +101,14 @@ try{
             $id = htmlspecialchars($_GET['id']);
             new_groupe($user_name, $name_new_groupe, $id);
         }
+
+        elseif($action == 'quitter_groupe' and isset($_GET['user_name']) and isset($_GET['id']) 
+            and isset($_GET['groupe_name'])){
+                $user_name = htmlspecialchars($_GET['user_name']);
+                $id = htmlspecialchars($_GET['id']);
+                $groupe_name = htmlspecialchars($_GET['groupe_name']);
+                quitter_groupe($user_name, $id, $groupe_name);
+            }
 
         elseif($action == 'ajouter_membre'){
             ajouter_membre();

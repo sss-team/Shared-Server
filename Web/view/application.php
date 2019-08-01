@@ -83,15 +83,31 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 										<li class="nav-item"> <a href="#"  class="op"><i class="icon text-main-color fa fa-sliders"  onclick="openNav()"><h5 style="display: inline"> Menu</h5></i></a></li>
 										<li class="nav-item">
 											<form class="form-inline md-form form-sm active-white-2 mt-2">
-												<input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Rechercher un fichier" aria-label="Search">
-												<a href="#"><i class="fa fa-search" aria-hidden="true"></i></a>
+												<input class="form-control form-control-sm mr-3 w-75" type="text" placeholder="Rechercher " aria-label="Search">
+												<a href="index.php"><i class="fa fa-search" aria-hidden="true"></i></a>
 											</form>
 										</li>
 										<li class="nav-item"><a href="#" class="nav-link notifications"><i class="icon text-main-color fa fa-bell"></i><span class="badge">5</span></a></li>
 										<li class="nav-item"><a href="#" class="nav-link messages"><i class="icon text-main-color fa fa-comment"></i><span class="badge">2</span></a></li>
-										<li class="has-dropdown"><a href="#" class="nav-link user-action"><img src="public/image/off.jpg"  class="avatar" alt="Avatar"> <strong><?= $user_name ?></strong> </a>
+										<li class="has-dropdown"><a href="#" class="nav-link user-action">
+
+
+											<?php
+												if(isset($pdp_user)){
+											?>
+												<img src=<?= $chemin_pdp ?>  class="avatar" alt="Avatar">
+											<?php
+												}
+												else{
+											?>
+												<img src="public/image/av.png"  class="avatar" alt="Avatar"> 
+											<?php
+												}
+											?>
+				
+											<strong><?= $user_name ?></strong> </a>
 											<ul class="sub-menu">
-												<li><a href="#" ><i class="fa fa-user-o"></i> Profile</a></li>
+												<li><a href="index.php?action=profil&user_name=<?= $user_name ?>&id=<?= $id ?>" ><i class="fa fa-user-o"></i> Profil</a></li>
 												<li><a href="index.php?action=se_deconnecter&amp;user_name=<?= $user_name ?>"><i class="fa fa-sign-out"></i> Déconnexion</a></li>
 											</ul>
 										</li>
@@ -849,7 +865,7 @@ if(isset($_GET['action']) and isset($_GET['id']) and isset($_GET['user_name'])){
 				}
 				if(isset($affichage_files_groupe)){			
 			?>
-				<a href="#"><i class="icon text-main-color fa fa-close"></i><h5 style="display: inline"> Quitter le groupe</h5></a>
+				<a href="index.php?action=quitter_groupe&amp;user_name=<?= $user_name ?>&amp;id=<?= $id ?>&amp;groupe_name=<?= $affichage_files_groupe ?>"><i class="icon text-main-color fa fa-close"></i><h5 style="display: inline"> Quitter le groupe</h5></a>
 			<?php
 				}
 			?>

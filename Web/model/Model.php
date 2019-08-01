@@ -20,7 +20,7 @@ class Query_bdd extends Connect_bdd{
 
         $connection_ssh2 = ssh2_connect("localhost", 22);
         ssh2_auth_password($connection_ssh2, "mm", "azerty1234");
-        ssh2_exec($connection_ssh2, "mkdir /var/www/html/Shared-Server-1/Web/public/stockage/users/\"$user_name\" && chmod 777 /var/www/html/Shared-Server-1/Web/public/stockage/users/\"$user_name\"");
+        ssh2_exec($connection_ssh2, "mkdir /var/www/html/public/stockage/users/\"$user_name\" && chmod 777 /var/www/html/public/stockage/users/\"$user_name\"");
         return $insertion_info;
     }
 
@@ -97,6 +97,20 @@ class Query_bdd extends Connect_bdd{
         return $deconnecter_user;
     }
 
+    public function select_ancien_mdp($user_name){
+        $bdd = $this->dbconnect();
+        $ancien_mdp = $bdd->prepare("SELECT mdp FROM membre WHERE user_name = ?");
+        $ancien_mdp->execute(array($user_name));
+        return $ancien_mdp;
+    }
+
+    public function insertion_new_mdp($passwd_hash, $user_name){
+        $bdd = $this->dbconnect();
+        $insert_new_mdp = $bdd->prepare("UPDATE membre SET mdp = ? WHERE user_name = ?");
+        $insert_new_mdp->execute(array($passwd_hash, $user_name));
+        return $insert_new_mdp;
+    }
+
     public function insert_new_file($user_name, $file_name, $groupe_name, $description_file, $destination){
         $bdd = $this->dbconnect();
         $insert_file = $bdd->prepare('INSERT INTO file(user_name, file_name, groupe_name, description_file) VALUES(?,?,?,?)');
@@ -104,7 +118,7 @@ class Query_bdd extends Connect_bdd{
         
         $connection_ssh2 = ssh2_connect("localhost", 22);
         ssh2_auth_password($connection_ssh2, "mm", "azerty1234");
-        ssh2_exec($connection_ssh2, "chmod 777 /var/www/html/Shared-Server-1/Web/\"$destination\"");
+        ssh2_exec($connection_ssh2, "chmod 777 /var/www/html/\"$destination\"");
 
         return $insert_file;
     }
@@ -115,10 +129,10 @@ class Query_bdd extends Connect_bdd{
         $verify_delete->execute(array($name_prop,  $groupe_file, $name_file ));
 
         if($type == "groupe"){
-            $chemin = "/var/www/html/Shared-Server-1/Web/public/stockage/groupe";
+            $chemin = "/var/www/html/public/stockage/groupe";
         }
         elseif($type == "user"){
-            $chemin = "/var/www/html/Shared-Server-1/Web/public/stockage/users";
+            $chemin = "/var/www/html/public/stockage/users";
         }
 
         $connection_ssh2 = ssh2_connect("localhost", 22);
@@ -141,6 +155,13 @@ class Query_bdd extends Connect_bdd{
         return $mes_groupes;
     }
 
+    public function quitter_groupe_user($id, $groupe_name, $id_groupe){
+        $bdd = $this->dbconnect();
+        $quitter_groupe = $bdd->prepare("DELETE FROM Groupe_membre WHERE groupe_name = ? and id_groupe = ? and id = ?");
+        $quitter_groupe->execute(array($groupe_name, $id_groupe, $id));
+        return $quitter_groupe;
+    }
+
     
     public function create_new_groupe($user_name, $name_new_groupe, $id){
         $bdd = $this->dbconnect();
@@ -149,7 +170,7 @@ class Query_bdd extends Connect_bdd{
 
         $connection_ssh2 = ssh2_connect("localhost", 22);
         ssh2_auth_password($connection_ssh2, "mm", "azerty1234");
-        ssh2_exec($connection_ssh2, "mkdir /var/www/html/Shared-Server-1/Web/public/stockage/groupe/\"$name_new_groupe\" && chmod 777 /var/www/html/Shared-Server-1/Web/public/stockage/groupe/\"$name_new_groupe\"");
+        ssh2_exec($connection_ssh2, "mkdir /var/www/html/public/stockage/groupe/\"$name_new_groupe\" && chmod 777 /var/www/html/public/stockage/groupe/\"$name_new_groupe\"");
         return $create_groupe;
     }
 
@@ -179,6 +200,63 @@ class Query_bdd extends Connect_bdd{
                                                 VALUES(?,?,?,?,?) ");
         $verify_insert_member->execute(array($name_groupe, $id_groupe, $id, $droit_ajout, $droit_suppr_file));
         return $verify_insert_member;
+    }
+
+    public function insert_info_profil($nom, $email, $prenom, $phone, $user_name){
+        $bdd = $this->dbconnect();
+            if($prenom !== ""){
+            $insert = $bdd->prepare("UPDATE membre SET prenom = ? WHERE user_name = ?");
+            $insert->execute(array($prenom, $user_name));
+            }
+            if($nom !== ""){
+            $inse = $bdd->prepare("UPDATE membre SET nom_complet = ? WHERE user_name = ?");
+            $inse->execute(array($nom, $user_name));
+            }
+
+            if($email !== "" and preg_match("#^[a-z0-9._-]+@esti.mg$#",$email)){
+            $inser = $bdd->prepare("UPDATE membre SET mail = ? WHERE user_name = ?");
+            $inser->execute(array($email, $user_name));
+            }
+
+            if($phone !== ""){
+            $ins = $bdd->prepare("UPDATE membre SET phone = ? WHERE user_name = ?");
+            $ins->execute(array($phone, $user_name));
+            
+            }
+            return $insert;
+        
+    }
+
+    public function select_info_user($user_name){
+        $bdd = $this->dbconnect();
+        $info_user = $bdd->prepare("SELECT * FROM membre WHERE user_name = ? ");
+        $info_user->execute(array($user_name));
+        return $info_user;
+    }
+
+    public function delete_pdp_ancien($groupe_name, $user_name){
+        $bdd = $this->dbconnect();
+
+        $pdp_user = $bdd->prepare("SELECT file_name FROM file WHERE groupe_name = ?");
+        $pdp_user->execute(array($groupe_name));
+        $pdp_user_li = $pdp_user->fetch();
+        $pdp_user = $pdp_user_li['file_name'];
+
+        $delete_ancien_pdp = $bdd->prepare("DELETE FROM file WHERE groupe_name = ? ");
+        $delete_ancien_pdp->execute(array($groupe_name));
+
+        $connection_ssh2 = ssh2_connect("localhost", 22);
+        ssh2_auth_password($connection_ssh2, "mm", "azerty1234");
+        ssh2_exec($connection_ssh2, "rm /var/www/html/public/stockage/users/$user_name/\"$pdp_user\"");
+        return $delete_ancien_pdp;
+    }
+
+    public function select_pdp_user($user_name){
+        $bdd = $this->dbconnect();
+        $groupe_name = "".$user_name."_pdp";
+        $pdp_user = $bdd->prepare("SELECT file_name FROM file WHERE groupe_name = ?");
+        $pdp_user->execute(array($groupe_name));
+        return $pdp_user;
     }
 
     public function select_id_user($user_name){
